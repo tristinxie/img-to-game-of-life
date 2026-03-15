@@ -1,0 +1,17 @@
+body {
+  background-color: rgb(31, 31, 31);
+  color: white;
+}
+h1 {
+  display: flex;
+  justify-content: space-around;
+}
+#canvasParent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+canvas {
+  background-color: white;
+}

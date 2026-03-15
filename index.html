@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>img2gol</title>
+    <link rel="stylesheet" href="./src/style.css">
+  </head>
+  <body>
+    <h1>Image to Conway's Game of Life</h1>
+    <div id="canvasParent">
+      <canvas id="canvas" width="500" height="500"></canvas>
+      <input type="file" id="image" name="image" accept="image/png, image/jpeg">
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
