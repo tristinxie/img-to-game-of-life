@@ -12,6 +12,11 @@ h1 {
   align-items: center;
   flex-direction: column;
 }
+#controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 canvas {
   background-color: white;
 }
