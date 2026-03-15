@@ -1,16 +1,17 @@
 import { Cell } from "./cell";
 import { ConwayGrid } from "./grid"
-import { GridTemplate } from "./gridTemplate";
+import { GridTemplate, square } from "./gridTemplate";
 const init = (): void => {
   const conwayGrid = ConwayGrid.instance;
   const template = GridTemplate.instance;
   template.canvas.addEventListener("click", (event) => {
-    const [x, y] = template.clickCoords(event)
+    const [x, y] = template.clickCoords(event);
     conwayGrid.setCellAlive(x, y);
-    console.log(`x: ${x}, y: ${y}`)
-    console.log(conwayGrid.grid)
+    console.log(`x: ${x}, y: ${y}`);
+    console.log(conwayGrid.grid);
     template.render(conwayGrid);
   })
+  template.render(conwayGrid);
 }
 
 document.addEventListener("DOMContentLoaded", init)

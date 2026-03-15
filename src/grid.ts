@@ -11,7 +11,7 @@ type Grid = {
 }
 
 class ConwayGrid implements Grid {
-	static instance: ConwayGrid = new ConwayGrid(500, 500);
+	static instance: ConwayGrid = new ConwayGrid(50, 50);
 	grid: Cell[][];
 	rows: number;
 	columns: number;
