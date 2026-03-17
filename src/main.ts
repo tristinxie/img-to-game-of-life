@@ -17,7 +17,6 @@ const init = (): void => {
     const [x, y] = template.clickCoords(event);
     conwayGrid.toggleCell(x, y);
     console.log(`x: ${x}, y: ${y}`);
-    console.log(conwayGrid.grid);
     template.render(conwayGrid);
   })
   const clearGrid = document.getElementById("clear");

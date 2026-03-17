@@ -34,8 +34,13 @@ class GridTemplate implements DOMCanvas {
 	};
 	clickCoords(event: PointerEvent): [number, number] {
 		const rect = this.canvas.getBoundingClientRect();
-		const x = Math.round((event.clientX - rect.left) / square.w);
-		const y = Math.round((event.clientY - rect.top) / square.h);
+		let x = Math.floor((event.clientX - rect.left) / square.w);
+		let y = Math.floor((event.clientY - rect.top) / square.h);
+		const clamp = (val: number, min: number, max: number) => {
+			return Math.min(Math.max(val, min), max);
+		}
+		x = clamp(x, 0, this.canvas.width);
+		y = clamp(y, 0, this.canvas.height);
 		return [x, y];
 	}
 	drawGrid(): void {
