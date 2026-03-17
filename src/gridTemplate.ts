@@ -15,13 +15,6 @@ const square = {
 };
 
 
-// const update = () => {
-//   ctx.clearRect(0, 0, canvas.width, canvas.height);
-//   drawSquare();
-//   square.x += square.dx;
-//   requestAnimationFrame(update);
-// }
-
 class GridTemplate implements DOMCanvas {
 	canvas: HTMLCanvasElement;
 	ctx: CanvasRenderingContext2D;
@@ -60,7 +53,7 @@ class GridTemplate implements DOMCanvas {
 		}
 	}
 	drawSquare(x: number, y: number) {
-		console.log(`Drawing square on ${x}, ${y}`)
+		// console.log(`Drawing square on ${x}, ${y}`)
 		this.ctx.fillRect(x * square.w, y * square.h, square.w, square.h);
 	};
 
@@ -69,13 +62,11 @@ class GridTemplate implements DOMCanvas {
 		for (const [y, gRow] of conwayGrid.grid.entries()) {
 			for (const [x, gCol] of gRow.entries()) {
 				if (gCol.alive) {
-					console.log(`x: ${x}, y: ${y}, gCol: ${gCol.alive}`);
+					// console.log(`x: ${x}, y: ${y}, gCol: ${gCol.alive}`);
 					this.drawSquare(x, y);
 				}
 			}
 		}
-
-
 	};
 }
 
