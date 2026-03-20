@@ -34,8 +34,10 @@ const init = (): void => {
   playPause?.addEventListener("click", (): void => {
     if (conwayGrid.playing) {
       conwayGrid.playing = false;
+      playPause.innerHTML = "▶";
     } else {
       conwayGrid.playing = true;
+      playPause.innerHTML = "⏸";
       update();
     }
   })
