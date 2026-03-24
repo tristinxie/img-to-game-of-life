@@ -1,18 +1,22 @@
 import { Cell } from "./cell";
 import { ConwayGrid } from "./grid"
 import { GridTemplate, square } from "./gridTemplate";
+const conwayGrid = ConwayGrid.instance;
+const template = GridTemplate.instance;
+const update = (newTime: number) => {
+  if (conwayGrid.playing) {
+    requestAnimationFrame(update);
 
-const init = (): void => {
-  const conwayGrid = ConwayGrid.instance;
-  const template = GridTemplate.instance;
-  const update = () => {
-    if (conwayGrid.playing) {
+    const now = newTime;
+    const elapsed = now - template.thenTime;
+    if (elapsed > template.fpsInterval) {
+      template.thenTime = now - (elapsed % template.fpsInterval);
       template.render(conwayGrid);
-      
       conwayGrid.step();
-      requestAnimationFrame(update);
-    } 
-  }
+    }
+  } 
+}
+const init = (): void => {
   template.canvas.addEventListener("click", (event) => {
     const [x, y] = template.clickCoords(event);
     conwayGrid.toggleCell(x, y);
@@ -38,8 +42,17 @@ const init = (): void => {
     } else {
       conwayGrid.playing = true;
       playPause.innerHTML = "⏸";
-      update();
+      requestAnimationFrame(update);
     }
+  })
+  const speed = document.getElementById("speed");
+  const speedParent = document.getElementById("speedValue");
+  speed?.addEventListener("input", (event: Event): void => {
+    if (!(event.target instanceof HTMLInputElement) || speedParent === null) {
+      throw new Error("Speed slider or value not found");
+    }
+    speedParent.innerHTML = event.target.value;
+    template.updateFps(Number(event.target.value));
   })
   template.render(conwayGrid);
 }

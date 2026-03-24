@@ -7,6 +7,7 @@ type DOMCanvas = {
 	drawGrid(): void;
 	clear(): void;
 	clickCoords(event: PointerEvent): [number, number];
+	updateFps(fps: number): void;
 	render(grid: ConwayGrid): void;
 };
 const square = {
@@ -18,6 +19,9 @@ const square = {
 class GridTemplate implements DOMCanvas {
 	canvas: HTMLCanvasElement;
 	ctx: CanvasRenderingContext2D;
+	thenTime: number;
+	fps: number;
+	fpsInterval: number;
 	static instance: GridTemplate = new GridTemplate();
 	constructor() {
 		this.canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -27,6 +31,10 @@ class GridTemplate implements DOMCanvas {
 		this.ctx = this.canvas.getContext("2d")!;
 		this.ctx.strokeStyle = "gray"
 		this.ctx.lineWidth = 0.5;
+		this.thenTime = window.performance.now();
+		const speedValue = (document.getElementById("speed") as HTMLInputElement).value;
+		this.fps = Number(speedValue);
+		this.fpsInterval = 1000 / this.fps;
 	};
 	clear(): void {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -61,7 +69,10 @@ class GridTemplate implements DOMCanvas {
 		// console.log(`Drawing square on ${x}, ${y}`)
 		this.ctx.fillRect(x * square.w, y * square.h, square.w, square.h);
 	};
-
+	updateFps(fps: number) {
+		this.fps = fps;
+		this.fpsInterval = 1000 / this.fps;
+	}
 	render(conwayGrid: ConwayGrid) {
 		this.clear();
 		for (const [y, gRow] of conwayGrid.grid.entries()) {
