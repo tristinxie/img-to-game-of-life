@@ -12,7 +12,8 @@ const update = (newTime: number) => {
     if (elapsed > template.fpsInterval) {
       template.thenTime = now - (elapsed % template.fpsInterval);
       template.render(conwayGrid);
-      conwayGrid.step();
+      // conwayGrid.step();
+      conwayGrid.stepInf();
     }
   } 
 }
@@ -31,7 +32,8 @@ const init = (): void => {
 
   const step = document.getElementById("step");
   step?.addEventListener("click", (): void => {
-    conwayGrid.step();
+    // conwayGrid.step();
+    conwayGrid.stepInf();
     template.render(conwayGrid);
   })
   const playPause = document.getElementById("playPause");

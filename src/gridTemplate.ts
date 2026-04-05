@@ -11,8 +11,8 @@ type DOMCanvas = {
 	render(grid: ConwayGrid): void;
 };
 const square = {
-  w: 10,
-  h: 10,
+  w: 5,
+  h: 5,
 };
 
 
