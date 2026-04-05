@@ -33,11 +33,11 @@ class ConwayGrid implements Grid {
 	}
 	setCellAlive(x: number, y: number): void {
 		this.grid[y][x].alive = true;
-		this.live.add(`${y},${x}`)
+		this.live.add(`${y},${x}`);
 	}
 	setCellDead(x: number, y: number): void {
 		this.grid[y][x].alive = false;
-		this.live.delete(`${y},${x}`)
+		this.live.delete(`${y},${x}`);
 	}
 	toggleCell(x: number, y: number): void {
 		this.grid[y][x].alive ? this.setCellDead(x, y) : this.setCellAlive(x, y);

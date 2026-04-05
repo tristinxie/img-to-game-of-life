@@ -7,17 +7,23 @@ h1 {
   justify-content: space-around;
 }
 #canvasParent {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin: 100px;
+  position: relative;
+  width: 750px;
+  height: 500px;
+  margin: 0 auto;
 }
 #controls {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-canvas {
+#golCanvas {
+  z-index: 2;
+}
+#gridCanvas {
+  z-index: 1;
   background-color: white;
+}
+canvas {
+  position: absolute;
 }

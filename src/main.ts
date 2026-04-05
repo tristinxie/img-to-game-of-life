@@ -17,7 +17,7 @@ const update = (newTime: number) => {
   } 
 }
 const init = (): void => {
-  template.canvas.addEventListener("click", (event) => {
+  template.golCanvas.addEventListener("click", (event) => {
     const [x, y] = template.clickCoords(event);
     conwayGrid.toggleCell(x, y);
     console.log(`x: ${x}, y: ${y}`);
