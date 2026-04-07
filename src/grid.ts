@@ -54,7 +54,7 @@ class ConwayGrid implements Grid {
 			const [y, x] = yx.split(",").map(Number);
 			for (let Y = y - 1; Y < y + 2; Y++) {
 				for (let X = x - 1; X < x + 2; X++) {
-					if (Y == y && X == x) {
+					if (X >= this.columns || X < 0 || Y >= this.rows || Y < 0 || (Y == y && X == x)) {
 						continue
 					}
 					const key = `${Y},${X}`;
