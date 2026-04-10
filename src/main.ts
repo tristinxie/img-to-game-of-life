@@ -5,7 +5,6 @@ const conwayGrid = ConwayGrid.instance;
 const template = GridTemplate.instance;
 template.width = conwayGrid.columns;
 template.height = conwayGrid.rows;
-// template.cam = {x: template.width / 2, y: template.height / 2, scale: 1}
 const update = (newTime: number) => {
   if (conwayGrid.playing) {
     requestAnimationFrame(update);
@@ -21,10 +20,13 @@ const update = (newTime: number) => {
 }
 const init = (): void => {
   template.golCanvas.addEventListener("click", (event) => {
+    if (template.dragged) {
+      template.dragged = false;
+      return;
+    }
     const m = template.mouseCoords(event);
     const {x, y} = template.gridCoords(m.x, m.y);
     conwayGrid.toggleCell(x, y);
-    // console.log(`x: ${x}, y: ${y}`);
     template.render(conwayGrid.live);
   })
   template.golCanvas.addEventListener("mousedown", (event) => {
@@ -33,19 +35,29 @@ const init = (): void => {
     template.lastX = m.x;
     template.lastY = m.y;
   })
-
+  const thresh = 2;
   window.addEventListener("mousemove", (event) => {
     if (!template.dragging) return;
     const m = template.mouseCoords(event);
-    template.cam.x -= (m.x - template.lastX) / template.cam.scale;
-    template.cam.y -= (m.y - template.lastY) / template.cam.scale;
+    const deltaX = m.x - template.lastX;
+    const deltaY = m.y - template.lastY;
     template.lastX = m.x;
     template.lastY = m.y;
+    if (Math.abs(deltaX) < thresh && Math.abs(deltaY) < thresh) {
+      return;
+    }
+    document.body.style.cursor = "grabbing";
+    template.dragged = true;
+    template.cam.x -= (deltaX) / template.cam.scale;
+    template.cam.y -= (deltaY) / template.cam.scale;
     template.clampCamera();
     template.render(conwayGrid.live);
   })
 
-  window.addEventListener("mouseup", () => template.dragging = false);
+  window.addEventListener("mouseup", () => {
+    template.dragging = false;
+    document.body.style.cursor = "default";
+  });
 
   const clearGrid = document.getElementById("clear");
   clearGrid?.addEventListener("click", (): void => {
@@ -81,7 +93,6 @@ const init = (): void => {
   const golCanvas = document.getElementById("golCanvas");
   golCanvas?.addEventListener("wheel", (event) => {
     const m = template.mouseCoords(event);
-    // console.log(m.x, m.y);
     template.zoom(m.x, m.y, -event.deltaY / 100);
     template.render(conwayGrid.live)
   })

@@ -12,6 +12,7 @@ type DOMCanvas = {
 	minScale: number;
 	maxScale: number;
 	dragging: boolean;
+	dragged: boolean;
 	lastX: number;
 	lastY: number;
 	golCanvas: HTMLCanvasElement;
@@ -38,6 +39,7 @@ class GridTemplate implements DOMCanvas {
 	minScale: number;
 	maxScale: number;
 	dragging: boolean;
+	dragged: boolean;
 	lastX: number;
 	lastY: number;
 	golCanvas: HTMLCanvasElement;
@@ -68,6 +70,7 @@ class GridTemplate implements DOMCanvas {
 		this.minScale = 1;
 		this.maxScale = 10;
 		this.dragging = false;
+		this.dragged = false;
 		this.lastX = 0;
 		this.lastY = 0;
 		this.thenTime = window.performance.now();
@@ -164,7 +167,7 @@ class GridTemplate implements DOMCanvas {
 		const top = Math.max(0, Math.min(p1.y, p2.y));
 		const bottom = Math.min(this.height, Math.max(p1.y, p2.y));
 		this.drawGrid(this.gridSize, "#e5e7eb", 1, left, right, top, bottom);
-		console.log(conwayGridLive);
+		// console.log(conwayGridLive);
 		for (let yx of conwayGridLive) {
 			const [y, x] = yx.split(",").map(Number);
 			this.drawSquare(x, y);
