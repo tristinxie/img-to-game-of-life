@@ -1,4 +1,3 @@
-import { Cell } from "./cell";
 import { ConwayGrid } from "./grid"
 import { GridTemplate } from "./gridTemplate";
 const conwayGrid = ConwayGrid.instance;

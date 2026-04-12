@@ -63,11 +63,11 @@ class GridTemplate implements DOMCanvas {
 		this.golCtx = this.golCanvas.getContext("2d")!;
 		this.gridCtx = this.gridCanvas.getContext("2d")!;
 		this.gridCtx.strokeStyle = "gray"
-		this.gridSize = 5;
+		this.gridSize = 10;
 		this.width = 0;
 		this.height = 0;
 		this.cam = {x: 0, y: 0, scale: 1}
-		this.minScale = 1;
+		this.minScale = 0.5;
 		this.maxScale = 10;
 		this.dragging = false;
 		this.dragged = false;
@@ -167,7 +167,7 @@ class GridTemplate implements DOMCanvas {
 		const top = Math.max(0, Math.min(p1.y, p2.y));
 		const bottom = Math.min(this.height, Math.max(p1.y, p2.y));
 		this.drawGrid(this.gridSize, "#e5e7eb", 1, left, right, top, bottom);
-		// console.log(conwayGridLive);
+		console.log(conwayGridLive);
 		for (let yx of conwayGridLive) {
 			const [y, x] = yx.split(",").map(Number);
 			this.drawSquare(x, y);
