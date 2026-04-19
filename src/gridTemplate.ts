@@ -20,8 +20,6 @@ type DOMCanvas = {
 	golCtx: CanvasRenderingContext2D;
 	gridCtx: CanvasRenderingContext2D;
 	gridSize: number;
-	width: number;
-	height: number;
 	cgl: Set<string>
 	screenToWorld(x: number, y: number): Coords;
 	drawSquare(x: number, y: number): void;
@@ -47,8 +45,6 @@ class GridTemplate implements DOMCanvas {
 	golCtx: CanvasRenderingContext2D;
 	gridCtx: CanvasRenderingContext2D;
 	gridSize: number;
-	width: number;
-	height: number;
 	thenTime: number;
 	fps: number;
 	fpsInterval: number;
@@ -64,8 +60,6 @@ class GridTemplate implements DOMCanvas {
 		this.gridCtx = this.gridCanvas.getContext("2d")!;
 		this.gridCtx.strokeStyle = "gray"
 		this.gridSize = 10;
-		this.width = 0;
-		this.height = 0;
 		this.cam = {x: 0, y: 0, scale: 1}
 		this.minScale = 0.5;
 		this.maxScale = 10;
@@ -96,12 +90,6 @@ class GridTemplate implements DOMCanvas {
 		const world = this.screenToWorld(x, y);
 		const wx = this.snap(world.x);
 		const wy = this.snap(world.y);
-		// const clamp = (val: number, min: number, max: number) => {
-		// 	return Math.min(Math.max(val, min), max);
-		// }
-		// wx = clamp(wx, 0, this.golCanvas.width);
-		// wy = clamp(wy, 0, this.golCanvas.height);
-		// console.log(`getCoords ${wx},${wy}`);
 		return {x: wx, y: wy};
 	}
 	mouseCoords(event: MouseEvent): Coords{
@@ -109,8 +97,6 @@ class GridTemplate implements DOMCanvas {
 		return {x: event.clientX - rect.left, y: event.clientY - rect.top};
 	}
 	drawGrid(step: number, color: string, width: number, left: number, right: number, top: number, bottom: number): void {
-		// this.clearGrid();
-		// console.log(this.gridSize)
 		this.gridCtx.beginPath();
 		this.gridCtx.strokeStyle = color;
 		this.gridCtx.lineWidth = width / this.cam.scale;
@@ -127,22 +113,12 @@ class GridTemplate implements DOMCanvas {
 	}
 	drawSquare(x: number, y: number) {
 		// console.log(`Drawing square on ${x}, ${y}`)
-		// console.log(`Drawing square on ${x}, ${y}`)
 		this.golCtx.fillRect(x * this.gridSize, y * this.gridSize, this.gridSize, this.gridSize);
 	};
 	updateFps(fps: number) {
 		this.fps = fps;
 		this.fpsInterval = 1000 / this.fps;
 	};
-	clampCamera() {
-		const vw = this.golCanvas.width / this.cam.scale;
-		const vh = this.golCanvas.height / this.cam.scale;
-
-		this.cam.x = Math.max(0, Math.min(this.cam.x, this.width - vw));
-		this.cam.y = Math.max(0, Math.min(this.cam.y, this.height - vh));
-		if (vw > this.width) this.cam.x = 0;
-		if (vh > this.height) this.cam.y = 0;
-	}
 	zoom(x: number, y: number, scrollDelta: number) {
 		const wx = this.cam.x + x / this.cam.scale;
 		const wy = this.cam.y + y / this.cam.scale;
@@ -150,7 +126,6 @@ class GridTemplate implements DOMCanvas {
 		this.cam.scale = next;
 		this.cam.x = wx - x / this.cam.scale;
 		this.cam.y = wy - y / this.cam.scale;
-		this.clampCamera();
 		this.render(this.cgl);
 	}
 	render(conwayGridLive: Set<string>) {
@@ -162,12 +137,12 @@ class GridTemplate implements DOMCanvas {
 
 		const p1 = this.screenToWorld(0, 0);
 		const p2 = this.screenToWorld(this.golCanvas.width, this.golCanvas.height);
-		const left = Math.max(0, Math.min(p1.x, p2.x));
-		const right = Math.min(this.width, Math.max(p1.x, p2.x));
-		const top = Math.max(0, Math.min(p1.y, p2.y));
-		const bottom = Math.min(this.height, Math.max(p1.y, p2.y));
+		const left = p1.x;
+		const right = p2.x;
+		const top = p1.y;
+		const bottom = p2.y;
 		this.drawGrid(this.gridSize, "#e5e7eb", 1, left, right, top, bottom);
-		console.log(conwayGridLive);
+		// console.log(conwayGridLive);
 		for (let yx of conwayGridLive) {
 			const [y, x] = yx.split(",").map(Number);
 			this.drawSquare(x, y);

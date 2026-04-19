@@ -2,8 +2,6 @@ import { ConwayGrid } from "./grid"
 import { GridTemplate } from "./gridTemplate";
 const conwayGrid = ConwayGrid.instance;
 const template = GridTemplate.instance;
-template.width = conwayGrid.columns;
-template.height = conwayGrid.rows;
 const update = (newTime: number) => {
   if (conwayGrid.playing) {
     requestAnimationFrame(update);
@@ -49,7 +47,6 @@ const init = (): void => {
     template.dragged = true;
     template.cam.x -= (deltaX) / template.cam.scale;
     template.cam.y -= (deltaY) / template.cam.scale;
-    template.clampCamera();
     template.render(conwayGrid.live);
   })
 
