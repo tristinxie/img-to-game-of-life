@@ -16,24 +16,10 @@ const update = (newTime: number) => {
   } 
 }
 const init = (): void => {
-  template.golCanvas.addEventListener("click", (event) => {
-    if (template.dragged) {
-      template.dragged = false;
-      return;
-    }
-    const m = template.mouseCoords(event);
-    const {x, y} = template.gridCoords(m.x, m.y);
-    conwayGrid.toggleCell(x, y);
-    template.render(conwayGrid.live);
-  })
-  template.golCanvas.addEventListener("mousedown", (event) => {
-    const m = template.mouseCoords(event);
-    template.dragging = true;
-    template.lastX = m.x;
-    template.lastY = m.y;
-  })
+  // Window listeners
   const thresh = 2;
   window.addEventListener("mousemove", (event) => {
+    document.body.style.cursor = "default";
     if (!template.dragging) return;
     const m = template.mouseCoords(event);
     const deltaX = m.x - template.lastX;
@@ -54,6 +40,36 @@ const init = (): void => {
     template.dragging = false;
     document.body.style.cursor = "default";
   });
+  const resizeCanvas = () => {
+    template.golCanvas.style.width = "100%";
+    template.golCanvas.style.height = "100%";
+    template.golCanvas.width = template.golCanvas.offsetWidth;
+    template.golCanvas.height = template.golCanvas.offsetHeight;
+
+    template.gridCanvas.style.width = "100%";
+    template.gridCanvas.style.height = "100%";
+    template.gridCanvas.width = template.golCanvas.offsetWidth;
+    template.gridCanvas.height = template.golCanvas.offsetHeight;
+    template.render(conwayGrid.live);
+  }
+  window.addEventListener("resize", resizeCanvas);
+  // End Window listeners
+  template.golCanvas.addEventListener("click", (event) => {
+    if (template.dragged) {
+      template.dragged = false;
+      return;
+    }
+    const m = template.mouseCoords(event);
+    const {x, y} = template.gridCoords(m.x, m.y);
+    conwayGrid.toggleCell(x, y);
+    template.render(conwayGrid.live);
+  })
+  template.golCanvas.addEventListener("mousedown", (event) => {
+    const m = template.mouseCoords(event);
+    template.dragging = true;
+    template.lastX = m.x;
+    template.lastY = m.y;
+  })
 
   const clearGrid = document.getElementById("clear");
   clearGrid?.addEventListener("click", (): void => {
@@ -70,10 +86,10 @@ const init = (): void => {
   playPause?.addEventListener("click", (): void => {
     if (conwayGrid.playing) {
       conwayGrid.playing = false;
-      playPause.innerHTML = "▶";
+      playPause.innerHTML = "▶ Play";
     } else {
       conwayGrid.playing = true;
-      playPause.innerHTML = "⏸";
+      playPause.innerHTML = "⏸ Pause";
       requestAnimationFrame(update);
     }
   })
@@ -83,17 +99,19 @@ const init = (): void => {
     if (!(event.target instanceof HTMLInputElement) || speedParent === null) {
       throw new Error("Speed slider or value not found");
     }
-    speedParent.innerHTML = event.target.value;
+    speedParent.innerHTML = `${event.target.value} fps`;
     template.updateFps(Number(event.target.value));
   })
   const golCanvas = document.getElementById("golCanvas");
   golCanvas?.addEventListener("wheel", (event) => {
+    event.preventDefault();
+    document.body.style.cursor = "ns-resize";
     const m = template.mouseCoords(event);
     template.zoom(m.x, m.y, -event.deltaY / 100);
     template.render(conwayGrid.live)
   })
-  template.render(conwayGrid.live);
-
+  // template.render(conwayGrid.live);
+  resizeCanvas();
 }
 
 document.addEventListener("DOMContentLoaded", init)

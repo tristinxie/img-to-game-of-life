@@ -3,26 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>img2gol</title>
     <link rel="stylesheet" href="./src/style.css">
   </head>
   <body>
-    <h1>Image to Conway's Game of Life</h1>
-    <div id="canvasParent">
-      <canvas id="gridCanvas" width="750" height="500"></canvas>
-      <canvas id="golCanvas" width="750" height="500"></canvas>
-    </div>
-    <div id="controls">
-      <button id="clear" title="Clear the grid">Clear</button>
-      <button id="playPause" title="Play the simulation">▶</button>
-      <button id="step" title="Step forward one generation">→</button>
-      <input id="speed" type="range" min="1" max="144" value="15">
-      <div id="speedValue">
-        15
+    <script type="module" src="/src/main.ts"></script>
+    <header>
+      <div id="logoTitle">
+        <img id="logo" src="/xie_gol.png"/>
+        <h1>Conway's Game of Life</h1>
+      </div>
+      <div id="contacts">
+        <a class="contact-icon" href="https://www.tristinxie.com">
+          <i class="fa fa-home fa-3x"></i>
+        </a>
+        <a class="contact-icon" href="https://www.github.com/tristinxie/img-to-game-of-life">
+          <i class="fa fa-github fa-3x"></i>
+        </a>
+      </div>
+    </header>
+    <div id="app">
+      <div id="toolbar">
+        <!-- <input type="file" id="image" name="image" accept="image/png, image/jpeg"> -->
+      </div>
+      <div id="canvasParent">
+        <canvas id="gridCanvas"></canvas>
+        <canvas id="golCanvas"></canvas>
+      </div>
+      <div id="controls">
+        <button id="clear" title="Clear the grid">Clear</button>
+        <button id="playPause" title="Play the simulation">▶ Play</button>
+        <button id="step" title="Step forward one generation">→ Step</button>
+        <div id="speedParent">
+          <input id="speed" type="range" min="1" max="144" value="15">
+          <div id="speedValue">
+            15 fps
+          </div>
+        </div>
       </div>
     </div>
-    <input type="file" id="image" name="image" accept="image/png, image/jpeg">
-    <script type="module" src="/src/main.ts"></script>
+    <div id="info">
+      <h1>
+        What is Conway's Game of Life?
+      </h1>
+      <p>
+        You control an infinite grid of cells. Each cell has two states: alive or dead. Click the
+        grid to toggle between the two states. During each step or "generation" the grid will change
+        states based on the number of alive neighbors.
+      </p>
+    </div>
   </body>
 </html>

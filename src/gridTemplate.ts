@@ -22,7 +22,7 @@ type DOMCanvas = {
 	gridSize: number;
 	cgl: Set<string>
 	screenToWorld(x: number, y: number): Coords;
-	drawSquare(x: number, y: number): void;
+	drawSquare(x: number, y: number, color: string): void;
 	drawGrid(step: number, color: string, width: number, left: number, right: number, top: number, bottom: number): void;
 	clearGol(): void;
 	clearGrid(): void;
@@ -58,7 +58,6 @@ class GridTemplate implements DOMCanvas {
 		}
 		this.golCtx = this.golCanvas.getContext("2d")!;
 		this.gridCtx = this.gridCanvas.getContext("2d")!;
-		this.gridCtx.strokeStyle = "gray"
 		this.gridSize = 10;
 		this.cam = {x: 0, y: 0, scale: 1}
 		this.minScale = 0.5;
@@ -111,8 +110,9 @@ class GridTemplate implements DOMCanvas {
 		}
 		this.gridCtx.stroke();
 	}
-	drawSquare(x: number, y: number) {
+	drawSquare(x: number, y: number, color: string) {
 		// console.log(`Drawing square on ${x}, ${y}`)
+		this.golCtx.fillStyle = color;
 		this.golCtx.fillRect(x * this.gridSize, y * this.gridSize, this.gridSize, this.gridSize);
 	};
 	updateFps(fps: number) {
@@ -141,11 +141,14 @@ class GridTemplate implements DOMCanvas {
 		const right = p2.x;
 		const top = p1.y;
 		const bottom = p2.y;
-		this.drawGrid(this.gridSize, "#e5e7eb", 1, left, right, top, bottom);
-		// console.log(conwayGridLive);
+
+		const gridColor = "#3c4043"
+		const squareColor = "#62fc03"
+		this.drawGrid(this.gridSize, gridColor, 1, left, right, top, bottom);
+		console.log(conwayGridLive);
 		for (let yx of conwayGridLive) {
 			const [y, x] = yx.split(",").map(Number);
-			this.drawSquare(x, y);
+			this.drawSquare(x, y, squareColor);
 		}
 		this.golCtx.setTransform(1, 0, 0, 1, 0, 0);
 		this.gridCtx.setTransform(1, 0, 0, 1, 0, 0);
