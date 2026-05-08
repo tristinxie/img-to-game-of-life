@@ -17,6 +17,9 @@ type DOMCanvas = {
 	lastY: number;
 	golCanvas: HTMLCanvasElement;
 	gridCanvas: HTMLCanvasElement;
+	generation: number;
+	genCounter: HTMLElement;
+	popCounter: HTMLElement;
 	golCtx: CanvasRenderingContext2D;
 	gridCtx: CanvasRenderingContext2D;
 	gridSize: number;
@@ -42,6 +45,9 @@ class GridTemplate implements DOMCanvas {
 	lastY: number;
 	golCanvas: HTMLCanvasElement;
 	gridCanvas: HTMLCanvasElement;
+	generation: number;
+	genCounter: HTMLElement;
+	popCounter: HTMLElement;
 	golCtx: CanvasRenderingContext2D;
 	gridCtx: CanvasRenderingContext2D;
 	gridSize: number;
@@ -58,6 +64,14 @@ class GridTemplate implements DOMCanvas {
 		}
 		this.golCtx = this.golCanvas.getContext("2d")!;
 		this.gridCtx = this.gridCanvas.getContext("2d")!;
+		this.generation = 0;
+		this.genCounter = document.getElementById("genCounter") as HTMLElement;
+		this.popCounter = document.getElementById("popCounter") as HTMLElement;
+		if (this.genCounter === null || this.popCounter === null) {
+			throw new Error("Generation or population counter not found")
+		}
+		this.genCounter.innerHTML = `Generation: 0`;
+		this.popCounter.innerHTML = `Population: -`;
 		this.gridSize = 10;
 		this.cam = {x: 0, y: 0, scale: 1}
 		this.minScale = 0.5;
@@ -127,6 +141,17 @@ class GridTemplate implements DOMCanvas {
 		this.cam.x = wx - x / this.cam.scale;
 		this.cam.y = wy - y / this.cam.scale;
 		this.render(this.cgl);
+	}
+	updateCounters(conwayGridLive: Set<string>, restart=false, skip=false) {
+		if (restart) {
+			this.generation = 0;
+		}
+		this.popCounter.innerHTML = `Population: ${conwayGridLive.size}`;
+		if (skip) {
+			return;
+		}
+		this.genCounter.innerHTML = `Generation: ${this.generation}`;
+		this.generation++;
 	}
 	render(conwayGridLive: Set<string>) {
 		this.cgl = conwayGridLive;

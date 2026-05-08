@@ -11,9 +11,13 @@ const update = (newTime: number) => {
     if (elapsed > template.fpsInterval) {
       template.thenTime = now - (elapsed % template.fpsInterval);
       template.render(conwayGrid.live);
+      template.updateCounters(conwayGrid.live);
       conwayGrid.stepInf();
     }
-  } 
+  } else {
+    // Render last frame to avoid update after pause
+    template.render(conwayGrid.live);
+  }
 }
 const init = (): void => {
   // Window listeners
@@ -63,6 +67,7 @@ const init = (): void => {
     const {x, y} = template.gridCoords(m.x, m.y);
     conwayGrid.toggleCell(x, y);
     template.render(conwayGrid.live);
+    template.updateCounters(conwayGrid.live, false, true);
   })
   template.golCanvas.addEventListener("mousedown", (event) => {
     const m = template.mouseCoords(event);
@@ -75,18 +80,21 @@ const init = (): void => {
   clearGrid?.addEventListener("click", (): void => {
     conwayGrid.clearGrid();
     template.clearGol();
+    template.updateCounters(conwayGrid.live, true);
   })
 
   const step = document.getElementById("step");
   step?.addEventListener("click", (): void => {
     conwayGrid.stepInf();
     template.render(conwayGrid.live);
+    template.updateCounters(conwayGrid.live);
   })
   const playPause = document.getElementById("playPause");
   playPause?.addEventListener("click", (): void => {
     if (conwayGrid.playing) {
       conwayGrid.playing = false;
       playPause.innerHTML = "▶ Play";
+      requestAnimationFrame(update);
     } else {
       conwayGrid.playing = true;
       playPause.innerHTML = "⏸ Pause";
@@ -94,12 +102,12 @@ const init = (): void => {
     }
   })
   const speed = document.getElementById("speed");
-  const speedParent = document.getElementById("speedValue");
+  const speedValue = document.getElementById("speedValue");
   speed?.addEventListener("input", (event: Event): void => {
-    if (!(event.target instanceof HTMLInputElement) || speedParent === null) {
+    if (!(event.target instanceof HTMLInputElement) || speedValue === null) {
       throw new Error("Speed slider or value not found");
     }
-    speedParent.innerHTML = `${event.target.value} fps`;
+    speedValue.innerHTML = `${event.target.value} fps`;
     template.updateFps(Number(event.target.value));
   })
   const golCanvas = document.getElementById("golCanvas");
@@ -112,6 +120,7 @@ const init = (): void => {
   })
   // template.render(conwayGrid.live);
   resizeCanvas();
+  template.updateCounters(conwayGrid.live);
 }
 
 document.addEventListener("DOMContentLoaded", init)
